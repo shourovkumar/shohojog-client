@@ -130,7 +130,6 @@ export default function ManageEventsPage() {
         </div>
       )}
 
-      {/* EDIT MODAL */}
       {editEvent && (
         <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4">
           <form onSubmit={handleUpdate} className="bg-white dark:bg-slate-900 rounded- w-full max-w-lg max-h- overflow-y-auto p-6 space-y-4">
@@ -171,7 +170,6 @@ export default function ManageEventsPage() {
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {deleteEventData && (
         <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-slate-900 rounded- w-full max-w-sm p-6 text-center">
