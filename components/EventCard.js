@@ -12,9 +12,12 @@ export default function EventCard({ event }) {
     }
   }, [event?._id]);
 
-  const dateStr = event?.date
-    ? new Date(event.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+  // Server e field: eventType, eventDate, creatorName
+  const type = event?.eventType || event?.type || "";
+  const dateStr = event?.eventDate || event?.date
+    ? new Date(event.eventDate || event.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
     : "";
+  const creatorName = event?.creatorName || event?.organizerName || "Shohojog";
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-amber-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
@@ -26,7 +29,7 @@ export default function EventCard({ event }) {
           className="w-full h-full object-cover"
         />
         <span className="absolute top-3 left-3 bg-white/95 text-teal-800 text-xs font-bold px-3 py-1.5 rounded-full">
-          {event?.type}
+          {type}
         </span>
         <span className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
           📅 {dateStr}
@@ -45,10 +48,10 @@ export default function EventCard({ event }) {
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-amber-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
             <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-sm">
-              {event?.organizerName?.charAt(0)?.toUpperCase() || "S"}
+              {creatorName?.charAt(0)?.toUpperCase() || "S"}
             </span>
             <div className="leading-tight">
-              <p className="text-xs font-semibold truncate max-w-">{event?.organizerName || "Shohojog"}</p>
+              <p className="text-xs font-semibold truncate max-w-">{creatorName}</p>
               <p className="text- text-slate-500">👥 {count} joined</p>
             </div>
           </div>
