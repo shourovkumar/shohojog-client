@@ -20,7 +20,7 @@ export default function ManageEventsPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const [form, setForm] = useState({ title: "", description: "", type: "Cleanup", thumbnail: "", location: "", date: "" });
+  const [form, setForm] = useState({ title: "", description: "", eventType: "Cleanup", thumbnail: "", location: "", eventDate: "" });
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
@@ -41,10 +41,10 @@ export default function ManageEventsPage() {
     setForm({
       title: ev.title || "",
       description: ev.description || "",
-      type: ev.type || "Cleanup",
+      eventType: ev.eventType || ev.type || "Cleanup",
       thumbnail: ev.thumbnail || "",
       location: ev.location || "",
-      date: ev.date ? new Date(ev.date).toISOString().split("T")[0] : "",
+      eventDate: ev.eventDate ? new Date(ev.eventDate).toISOString().split("T")[0] : "",
     });
   }
 
@@ -53,12 +53,12 @@ export default function ManageEventsPage() {
     if (!form.title.trim()) return toast.error("Title dao");
     if (!form.description.trim()) return toast.error("Description dao");
     if (!form.location.trim()) return toast.error("Location dao");
-    if (!form.date) return toast.error("Date dao");
-    if (form.date < today) return toast.error("Past date hobe na");
+    if (!form.eventDate) return toast.error("Date dao");
+    if (form.eventDate < today) return toast.error("Past date hobe na");
 
     setSaving(true);
     try {
-      const updated = await updateEvent(editEvent._id, form);
+      const updated = await updateEvent(editEvent._id, { ...form, type: form.eventType, date: form.eventDate });
       const newEvent = updated.event || updated;
       setEvents((prev) => prev.map((ev) => (ev._id === editEvent._id ? { ...ev, ...form, ...newEvent } : ev)));
       toast.success("Event update hoye gese!");
@@ -103,7 +103,6 @@ export default function ManageEventsPage() {
         <div className="bg-white dark:bg-slate-900 rounded- p-12 text-center border mt-8">
           <p className="text-6xl">📭</p>
           <h2 className="text-2xl font-black mt-4">Ekhono kono event create koro nai</h2>
-          <p className="text-slate-500 mt-2">Prothom event ta create koro</p>
           <Link href="/create-event" className="inline-block mt-5 bg-amber-500 text-white font-bold px-6 py-3 rounded-full">Create Event →</Link>
         </div>
       ) : (
@@ -114,8 +113,8 @@ export default function ManageEventsPage() {
               <img src={ev.thumbnail || "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=400&q=80"} alt={ev.title} className="w-28 h-28 md:w-32 md:h-32 object-cover rounded-2xl shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex gap-2">
-                  <span className="bg-teal-100 text-teal-800 text- font-bold px-2.5 py-1 rounded-full">{ev.type}</span>
-                  <span className="bg-amber-100 text-amber-800 text- font-bold px-2.5 py-1 rounded-full">{ev.date ? new Date(ev.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}</span>
+                  <span className="bg-teal-100 text-teal-800 text- font-bold px-2.5 py-1 rounded-full">{ev.eventType || ev.type}</span>
+                  <span className="bg-amber-100 text-amber-800 text- font-bold px-2.5 py-1 rounded-full">{ev.eventDate ? new Date(ev.eventDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}</span>
                 </div>
                 <h3 className="font-bold mt-2 line-clamp-2">{ev.title}</h3>
                 <p className="text-xs text-slate-500 mt-1">📍 {ev.location}</p>
@@ -148,13 +147,13 @@ export default function ManageEventsPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="text-sm font-bold">Type</label>
-                <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full mt-1 px-4 py-3 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none">
+                <select value={form.eventType} onChange={(e) => setForm({ ...form, eventType: e.target.value })} className="w-full mt-1 px-4 py-3 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none">
                   {TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-sm font-bold">Date</label>
-                <input type="date" min={today} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full mt-1 px-4 py-3 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" />
+                <input type="date" min={today} value={form.eventDate} onChange={(e) => setForm({ ...form, eventDate: e.target.value })} className="w-full mt-1 px-4 py-3 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" />
               </div>
             </div>
             <div>
