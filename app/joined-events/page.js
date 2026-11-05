@@ -16,7 +16,7 @@ export default function JoinedEventsPage() {
 
   useEffect(() => {
     if (!isPending && !user) {
-      toast.error("Please login to view your joined events");
+      toast.error("Please login to view your joined events", { id: "login-required" });
       router.push("/login");
     }
   }, [isPending, user, router]);

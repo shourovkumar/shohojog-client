@@ -23,7 +23,7 @@ export default function ManageEventsPage() {
 
   useEffect(() => {
     if (!isPending && !user) {
-      toast.error("Please login to manage your events");
+      toast.error("Please login to manage your events", { id: "login-required" });
       router.push("/login");
     }
   }, [isPending, user, router]);

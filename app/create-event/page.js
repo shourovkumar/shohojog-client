@@ -30,7 +30,7 @@ export default function CreateEventPage() {
 
   useEffect(() => {
     if (!isPending && !user) {
-      toast.error("Please login to create an event");
+      toast.error("Please login to create an event", { id: "login-required" });
       router.push("/login");
     }
   }, [isPending, user, router]);
