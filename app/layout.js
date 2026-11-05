@@ -1,24 +1,22 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "react-hot-toast";
+import Providers from "@/components/Providers";
 
 export const metadata = {
-  title: "Shohojog - Manusher Pase Manush",
-  description: "Join volunteer events, create events, help your community.",
+  title: "Shohojog - Community Events",
+  description: "Discover, create and join social development events.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-[#FFF8EC] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <body className="bg-[#FFF8ED] dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
+        <Providers>
           <Navbar />
-          <main className="min-h-[70vh]">{children}</main>
+          <main className="min-h-">{children}</main>
           <Footer />
-          <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
