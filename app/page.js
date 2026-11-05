@@ -15,7 +15,7 @@ export default function HomePage() {
 
   const stats = [
     { icon: "🎉", value: "120+", label: "Events Completed" },
-    { icon: "❤️", value: "2,400+", label: "Happy Volunteers" },
+    { icon: "❤", value: "2,400+", label: "Happy Volunteers" },
     { icon: "🌳", value: "15,000+", label: "Trees Planted" },
     { icon: "📍", value: "8 Cities", label: "Active Communities" },
   ];
@@ -24,9 +24,9 @@ export default function HomePage() {
     { icon: "🔍", title: "Find Events Fast", desc: "Search by title or location and filter by event type. New events are added every week." },
     { icon: "🤝", title: "Join in One Click", desc: "See event details, check who joined, and join instantly. No long forms, no waiting." },
     { icon: "🌱", title: "Create Your Own", desc: "Organize a cleanup, plantation or donation drive in your area and invite the community." },
-    { icon: "🛡️", title: "Safe and Verified", desc: "Protected routes with JWT. Only event creators can edit or delete their own events." },
+    { icon: "🛡", title: "Safe and Verified", desc: "Protected routes with JWT. Only event creators can edit or delete their own events." },
     { icon: "📱", title: "Works Everywhere", desc: "Fully responsive on mobile, tablet and desktop, with light and dark mode." },
-    { icon: "❤️", title: "Track Your Impact", desc: "See all your joined events in one place, sorted by the nearest date first." },
+    { icon: "❤", title: "Track Your Impact", desc: "See all your joined events in one place, sorted by the nearest date first." },
   ];
 
   const gallery = [
