@@ -12,12 +12,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className="bg-[#FFF8ED] dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased">
         <Providers>
           <Suspense fallback={<div className="h-" />}>
             <Navbar />
           </Suspense>
-          <main className="min-h-">
+          <main className="min-h-screen">
             <Suspense fallback={<div className="text-center py-16">Loading...</div>}>
               {children}
             </Suspense>
