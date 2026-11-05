@@ -9,7 +9,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const { data: session, isPending } = useSession();
   const user = session?.user;
-
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [joinedCount, setJoinedCount] = useState(0);
@@ -33,15 +32,15 @@ export default function ProfilePage() {
 
   async function handleUpdate(e) {
     e.preventDefault();
-    if (!name.trim()) return toast.error("Naam dao");
+    if (!name.trim()) return toast.error("Please enter your name");
     setSaving(true);
     const { error } = await updateUser({ name: name.trim(), image: image.trim() || undefined });
     setSaving(false);
     if (error) {
-      toast.error(error.message || "Update hoy nai");
+      toast.error(error.message || "Could not update");
       return;
     }
-    toast.success("Profile update hoye gese!");
+    toast.success("Profile updated successfully!");
     window.location.reload();
   }
 
@@ -50,12 +49,10 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-black text-center">My Profile 👤</h1>
-
+      <h1 className="text-3xl font-black text-center">My Profile</h1>
       <div className="bg-white dark:bg-slate-900 rounded- p-6 md:p-8 mt-6 border border-amber-100 dark:border-slate-800 shadow-xl">
         <div className="flex flex-col items-center">
           {user.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={user.image} alt={user.name} className="w-24 h-24 rounded-full object-cover border-4 border-amber-400" />
           ) : (
             <span className="w-24 h-24 rounded-full bg-teal-700 text-white flex items-center justify-center text-4xl font-black">{user.name?.charAt(0)?.toUpperCase()}</span>
@@ -73,7 +70,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-
         <form onSubmit={handleUpdate} className="space-y-4 mt-8">
           <div>
             <label className="text-sm font-bold">Name</label>
@@ -81,10 +77,10 @@ export default function ProfilePage() {
           </div>
           <div>
             <label className="text-sm font-bold">Photo URL</label>
-            <input value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://... chobir link" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600" />
+            <input value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://... image link" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600" />
           </div>
           <div>
-            <label className="text-sm font-bold">Email (Change kora jabe na)</label>
+            <label className="text-sm font-bold">Email (Cannot be changed)</label>
             <input value={user.email} disabled className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-100 dark:bg-slate-800 opacity-60" />
           </div>
           <button disabled={saving} className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-4 rounded-full disabled:opacity-60">
