@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { signOut, useSession } from "@/lib/auth-client";
 import { clearToken } from "@/lib/api";
 import toast from "react-hot-toast";
 
-export default function Navbar() {
+function NavbarContent() {
   const [open, setOpen] = useState(false);
   const [drop, setDrop] = useState(false);
   const [theme, setTheme] = useState("light");
@@ -50,7 +50,7 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 h- flex items-center justify-between gap-3">
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <span className="w-10 h-10 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-xl font-black">S</span>
-          <span className="text-xl md:text-2xl font-black tracking-tight">Shoho<span className="text-amber-500">jog</span></span>
+          <span className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">Shoho<span className="text-amber-500">jog</span></span>
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
@@ -60,7 +60,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 md:gap-3">
           <button onClick={toggleTheme} className="w-9 h-9 rounded-full bg-amber-100 dark:bg-slate-800 flex items-center justify-center text-lg" aria-label="Toggle theme">
-            {theme === "dark" ? "☀️" : "🌙"}
+            {theme === "dark" ? "☀" : "🌙"}
           </button>
 
           {!user ? (
@@ -110,5 +110,13 @@ export default function Navbar() {
         </div>
       )}
     </header>
+  );
+}
+
+export default function Navbar() {
+  return (
+    <Suspense fallback={<header className="h- bg-[#FFF8ED] dark:bg-slate-950 border-b border-amber-100 dark:border-slate-800" />}>
+      <NavbarContent />
+    </Suspense>
   );
 }
