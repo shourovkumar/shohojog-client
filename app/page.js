@@ -38,12 +38,12 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* HERO */}
+      {/* HERO - Mobile fix, no bracket class */}
       <section className="max-w-7xl mx-auto px-4 pt-6">
-        <div className="bg-[#FFF8ED] dark:bg-slate-900 rounded- overflow-hidden grid md:grid-cols-2 min-h- md:min-h- border border-amber-100 dark:border-slate-800">
-          <div className="p-6 md:p-10 flex flex-col justify-center">
-            <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text- font-bold px-3 py-1.5 rounded-full w-fit">COMMUNITY - TOGETHER - CHANGE</span>
-            <h1 className="text-4xl md:text-6xl font-black leading-[1.05] mt-4 text-slate-900 dark:text-white">Do Good.<br />Together.<br /><span className="text-teal-700 dark:text-teal-400">Right Here.</span></h1>
+        <div className="bg-[#FFF8ED] dark:bg-slate-900 rounded-3xl overflow-hidden flex flex-col md:grid md:grid-cols-2 border border-amber-100 dark:border-slate-800">
+          <div className="p-6 md:p-10 flex flex-col justify-center order-1">
+            <span className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-xs font-bold px-3 py-1.5 rounded-full w-fit">COMMUNITY - TOGETHER - CHANGE</span>
+            <h1 className="text-4xl md:text-6xl font-black leading-tight mt-4 text-slate-900 dark:text-white">Do Good.<br />Together.<br /><span className="text-teal-700 dark:text-teal-400">Right Here.</span></h1>
             <p className="text-slate-600 dark:text-slate-300 mt-4 max-w-md">Discover cleanup drives, tree plantations, donation events and health camps near you. Join a cause, meet good people, and make your city better.</p>
             <div className="flex flex-wrap gap-3 mt-6">
               <Link href="/upcoming" className="bg-teal-700 hover:bg-teal-800 text-white font-bold px-6 py-3 rounded-full">Explore Upcoming</Link>
@@ -51,9 +51,9 @@ export default function HomePage() {
             </div>
             <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">No fees. Just show up with a kind heart.</p>
           </div>
-          <div className="relative min-h-">
-            <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1000&q=80" alt="Volunteers" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute bottom-4 left-4 bg-white dark:bg-slate-800 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-lg">
+          <div className="relative w-full order-2">
+            <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1000&q=80" alt="Volunteers" className="w-full h-72 md:h-full object-cover block" />
+            <div className="absolute bottom-4 left-4 right-4 md:right-auto bg-white dark:bg-slate-800 rounded-2xl px-4 py-3 flex items-center gap-2 shadow-lg">
               <span>🤝</span>
               <div><p className="font-black text-sm text-slate-900 dark:text-white">2,400+ Volunteers</p><p className="text-xs text-slate-500 dark:text-slate-400">Joined events across Bangladesh</p></div>
             </div>
@@ -94,7 +94,7 @@ export default function HomePage() {
           <Link href="/upcoming" className="text-teal-700 dark:text-teal-400 font-bold text-sm shrink-0">View All</Link>
         </div>
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6 animate-pulse">{[1, 2, 3].map((i) => <div key={i} className="h- bg-amber-100 dark:bg-slate-800 rounded-3xl" />)}</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6 animate-pulse">{[1, 2, 3].map((i) => <div key={i} className="h-72 bg-amber-100 dark:bg-slate-800 rounded-3xl" />)}</div>
         ) : events.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 border border-amber-100 dark:border-slate-800 rounded-3xl p-10 text-center mt-6">
             <p className="text-4xl">📭</p>
@@ -117,7 +117,7 @@ export default function HomePage() {
 
       {/* NEWSLETTER */}
       <section className="max-w-7xl mx-auto px-4 mt-12 mb-12">
-        <div className="bg-teal-700 dark:bg-teal-800 rounded- p-8 md:p-12 text-center">
+        <div className="bg-teal-700 dark:bg-teal-800 rounded-3xl p-8 md:p-12 text-center">
           <h2 className="text-2xl md:text-3xl font-black text-white">Get New Events in Your Inbox</h2>
           <p className="text-teal-100 mt-2">One email a week. No spam. Only good causes near you.</p>
           <form onSubmit={(e) => { e.preventDefault(); toast.success("Subscribed!"); }} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-6">
