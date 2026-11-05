@@ -17,6 +17,7 @@ export default function Footer() {
             <li><Link href="/" className="hover:text-amber-400">Home</Link></li>
             <li><Link href="/upcoming" className="hover:text-amber-400">Upcoming Events</Link></li>
             <li><Link href="/create-event" className="hover:text-amber-400">Create Event</Link></li>
+            <li><Link href="/manage-events" className="hover:text-amber-400">Manage Events</Link></li>
             <li><Link href="/joined-events" className="hover:text-amber-400">Joined Events</Link></li>
           </ul>
         </div>
