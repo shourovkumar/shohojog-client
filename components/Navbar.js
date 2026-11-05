@@ -47,7 +47,8 @@ function NavbarContent() {
 
   return (
     <header className="sticky top-0 z-50 bg-[#FFF8ED]/95 dark:bg-slate-950/95 backdrop-blur border-b border-amber-100 dark:border-slate-800">
-      <nav className="max-w-7xl mx-auto px-4 h- flex items-center justify-between gap-3">
+      {/* 👇 EKHANE FIX - age h- chilo, ekhon py-4 sm:py-5 */}
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 flex items-center justify-between gap-3">
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <span className="w-10 h-10 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-xl font-black">S</span>
           <span className="text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white">Shoho<span className="text-amber-500">jog</span></span>
