@@ -1,17 +1,49 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import EventCard from "@/components/EventCard";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { getEvents } from "@/lib/api";
 
 const TYPES = ["All", "Cleanup", "Plantation", "Donation", "Winter Relief", "Food Drive", "Health Camp", "Education", "Others"];
 
-export default function UpcomingPage() {
+// Footer theke asa short type -> dropdown er asol type e map kora
+const TYPE_MAP = {
+  "Cleanup": "Cleanup",
+  "Plantation": "Plantation",
+  "Donation": "Donation",
+  "Winter": "Winter Relief",
+  "Winter Relief": "Winter Relief",
+  "Food": "Food Drive",
+  "Health": "Health Camp",
+};
+
+function UpcomingContent() {
+  const searchParams = useSearchParams();
+  const urlType = searchParams.get("type");
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [type, setType] = useState("All");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // 1. URL theke type porbe - Footer click korle ekhane asbe
+  useEffect(() => {
+    if (urlType) {
+      const mapped = TYPE_MAP[urlType] || urlType;
+      // Dropdown e thakle set koro, na thakle direct set koro
+      if (TYPES.includes(mapped)) {
+        setType(mapped);
+      } else {
+        // case-insensitive match
+        const found = TYPES.find((t) => t.toLowerCase() === mapped.toLowerCase());
+        if (found) setType(found);
+      }
+    } else {
+      setType("All");
+    }
+  }, [urlType]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400);
@@ -41,7 +73,7 @@ export default function UpcomingPage() {
       <p className="text-sm text-slate-500 mt-4">{loading ? "Searching events..." : `${events.length} event${events.length !== 1 ? "s" : ""} found`}</p>
 
       {loading ? <LoadingSkeleton count={6} /> : events.length === 0 ? (
-        <div className="bg-white dark:bg-slate-900 border rounded- p-12 text-center mt-6">
+        <div className="bg-white dark:bg-slate-900 border rounded-[1.5rem] p-12 text-center mt-6">
           <p className="text-6xl">🔍</p>
           <h2 className="text-2xl font-black mt-4">No result found</h2>
           <p className="text-slate-500 text-sm mt-2">Try a different search or event type.</p>
@@ -51,5 +83,13 @@ export default function UpcomingPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">{events.map((ev) => <EventCard key={ev._id} event={ev} />)}</div>
       )}
     </div>
+  );
+}
+
+export default function UpcomingPage() {
+  return (
+    <Suspense fallback={<LoadingSkeleton count={6} />}>
+      <UpcomingContent />
+    </Suspense>
   );
 }
