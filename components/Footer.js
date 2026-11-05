@@ -24,10 +24,10 @@ export default function Footer() {
         <div>
           <h3 className="font-bold text-lg mb-3">Event Types</h3>
           <ul className="space-y-2 text-white/70 text-sm">
-            <li>Cleanup Drives</li>
-            <li>Tree Plantation</li>
-            <li>Donation & Food Drive</li>
-            <li>Winter Relief & Health Camp</li>
+            <li><Link href="/upcoming?type=Cleanup" className="hover:text-amber-400">Cleanup Drives</Link></li>
+            <li><Link href="/upcoming?type=Plantation" className="hover:text-amber-400">Tree Plantation</Link></li>
+            <li><Link href="/upcoming?type=Donation" className="hover:text-amber-400">Donation & Food Drive</Link></li>
+            <li><Link href="/upcoming?type=Winter" className="hover:text-amber-400">Winter Relief & Health Camp</Link></li>
           </ul>
         </div>
         <div>
