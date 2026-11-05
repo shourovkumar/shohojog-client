@@ -17,6 +17,7 @@ export default function HomePage() {
 
   return (
     <div>
+      {/* Banner */}
       <section className="max-w-7xl mx-auto px-4 pt-8 md:pt-12">
         <div className="bg-[#FFF8ED] dark:bg-slate-900 border border-amber-100 dark:border-slate-800 rounded- overflow-hidden grid md:grid-cols-2">
           <div className="p-6 sm:p-10 md:p-12 flex flex-col justify-center">
@@ -39,6 +40,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Stats */}
       <section className="max-w-7xl mx-auto px-4 mt-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {[
@@ -56,6 +58,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Features */}
       <section className="max-w-7xl mx-auto px-4 mt-14">
         <h2 className="text-2xl sm:text-3xl font-black text-center">Why Join Shohojog?</h2>
         <p className="text-center text-slate-500 mt-2 max-w-xl mx-auto text-sm sm:text-base">Everything you need to find a cause, join it, and lead it - in one simple place.</p>
@@ -77,6 +80,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Recent Events */}
       <section className="max-w-7xl mx-auto px-4 mt-14">
         <div className="flex items-end justify-between gap-3 flex-wrap">
           <div><h2 className="text-2xl sm:text-3xl font-black">Recent Upcoming Events</h2><p className="text-slate-500 text-sm mt-1">Fresh events near you - join before seats fill up.</p></div>
@@ -89,6 +93,7 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* Gallery */}
       <section className="max-w-7xl mx-auto px-4 mt-14">
         <h2 className="text-2xl sm:text-3xl font-black text-center">Moments From Our Community</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-6">
@@ -103,6 +108,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Newsletter */}
       <section className="max-w-7xl mx-auto px-4 mt-14 mb-4">
         <div className="bg-teal-700 rounded- p-6 sm:p-10 text-center text-white">
           <h2 className="text-2xl sm:text-3xl font-black">Get New Events in Your Inbox</h2>
