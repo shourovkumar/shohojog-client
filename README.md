@@ -1,33 +1,47 @@
-# Shohojog — Community-Driven Social Development Events
+# Shohojog - Community Volunteer Events Platform
 
-Live Site: https://shohojog-client.vercel.app
+A community-driven platform to discover, create, and join social development events across Bangladesh. Small actions, together, make a big change.
 
-Shohojog is a community-driven platform where people can discover, create, and join social development events like cleanup, plantation, donation, winter relief, and health camps.
+## Live Links
+
+- **Client:** https://shohojog-client.vercel.app
+- **Server:** https://shohojog-server-1.onrender.com
+- **Client Repo:** https://github.com/shourovkumar/shohojog-client
+- **Server Repo:** https://github.com/shourovkumar/shohojog-server
 
 ## Features
 
-- **Discover Upcoming Events:** Search by title / location and filter by event type — all filtering happens on the backend.
-- **Event Details + Join System:** Anyone can view event details without login. Logged-in users can join / leave an event, and duplicate join is blocked.
-- **Create, Manage & Update Events:** Logged-in users can create events with past-date validation, and manage only their own events with edit / delete modals.
-- **Joined Events:** See only my joined events, sorted by nearest date first, with leave option.
-- **Secure Auth + JWT:** Email/Password + Google login with BetterAuth. Protected APIs are verified with JWT on the server.
-- **Dark / Light Theme:** Full-site theme toggle with `next-themes`, saved across reloads.
-- **Profile View & Update:** View profile and update name / photo, synced with auth.
-- **Loading Skeletons:** Home and list pages show skeletons while data loads — no blank screen.
-- **Fully Responsive:** Mobile, tablet and desktop — new warm cream + deep teal design, not a demo copy.
+- Browse upcoming events with search by title/location and filter by event type
+- View event details with joined volunteer count
+- Create, edit, and delete your own events (protected with JWT)
+- Join / Leave events - duplicate join blocked
+- My Events, Joined Events, and My Profile pages (private routes)
+- Email + Google login with BetterAuth
+- Light / Dark mode with theme persistence
+- Fully responsive on mobile, tablet, and desktop
+- Toast notifications - no alert() used
 
 ## Tech Stack
 
-- **Frontend:** Next.js 15 (App Router) + JavaScript + Tailwind CSS
-- **Auth:** BetterAuth + MongoDB Adapter
-- **Backend:** Express.js + MongoDB + Mongoose + JWT
-- **Toast:** react-hot-toast
+**Client:** Next.js 16 (App Router), Tailwind CSS v4, BetterAuth, react-hot-toast
+**Server:** Express.js, 【entity-MongoDB¦canonical_name=MongoDB】 / Mongoose, JWT
 
-## Run Locally
+## Pages / Routes
 
-**Client:**
+- `/` - Home (Hero, Stats, Features, Recent Events, Gallery, Newsletter)
+- `/upcoming` - All Upcoming Events with Search + Filter
+- `/events/[id]` - Event Details + Join
+- `/login` - Login (Email + Google)
+- `/register` - Register
+- `/create-event` - Create Event (Private)
+- `/manage-events` - Manage My Events (Private)
+- `/joined-events` - Joined Events (Private)
+- `/profile` - My Profile (Private)
 
+## How To Run Locally
+
+### 1. Clone Client
 ```bash
+git clone https://github.com/shourovkumar/shohojog-client.git
 cd shohojog-client
 npm install
-npm run dev
