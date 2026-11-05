@@ -21,7 +21,6 @@ export default function EventCard({ event }) {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-amber-100 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col">
       <div className="relative h-48 overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={event?.thumbnail || "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&q=80"} alt={event?.title} className="w-full h-full object-cover" />
         <span className="absolute top-3 left-3 bg-white/95 text-teal-800 text-xs font-bold px-3 py-1.5 rounded-full">{type}</span>
         <span className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">📅 {dateStr}</span>
