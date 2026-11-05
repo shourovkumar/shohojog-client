@@ -1,99 +1,57 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { signIn, useSession } from "@/lib/auth-client";
+import { signIn, signInWithGoogle } from "@/lib/auth-client";
 import { fetchServerToken } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { data: session } = useSession();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
-  // Google diye login hoye fire asle token niye home e pathao
-  useEffect(() => {
-    if (session?.user) {
-      fetchServerToken(session.user).then(() => router.push("/"));
-    }
-  }, [session, router]);
-
-  async function handleLogin(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (!email.includes("@")) return toast.error("Thik email dao");
-    if (!password) return toast.error("Password dao");
+    if (!form.email) return toast.error("Please enter your email");
+    if (!form.password) return toast.error("Please enter your password");
     setLoading(true);
-    const { error } = await signIn.email({ email, password });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message || "Login hoy nai, email / password check koro");
-      return;
+    try {
+      const res = await signIn.email({ email: form.email, password: form.password });
+      if (res.error) throw new Error(res.error.message || "Login failed");
+      const user = res.data?.user;
+      if (user?.email) await fetchServerToken(user);
+      toast.success("Welcome back!");
+      router.push("/upcoming");
+    } catch (err) {
+      toast.error(err.message || "Login failed. Check your email and password.");
+    } finally {
+      setLoading(false);
     }
-    // Session theke user niye server token nao
-    // Ektu wait kore session update hote dao
-    setTimeout(async () => {
-      const res = await fetch("/api/auth/get-session");
-      const data = await res.json().catch(() => ({}));
-      if (data?.user) await fetchServerToken(data.user);
-      toast.success("Login hoye gese!");
-      router.push("/");
-    }, 500);
   }
 
   async function handleGoogle() {
-    await signIn.social({ provider: "google", callbackURL: "/login" });
+    try {
+      await signInWithGoogle();
+    } catch {
+      toast.error("Google login failed");
+    }
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <div className="bg-white dark:bg-slate-900 rounded- p-7 md:p-8 border border-amber-100 dark:border-slate-800 shadow-xl">
-        <h1 className="text-3xl font-black text-center">Welcome Back 👋</h1>
-        <p className="text-center text-slate-500 text-sm mt-2">Shohojog e login koro</p>
-
-        <button
-          onClick={handleGoogle}
-          className="w-full mt-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:shadow"
-        >
-          <span className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center font-black">G</span>
-          Google diye Login
-        </button>
-
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-          <span className="text-xs text-slate-400">OR</span>
-          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="text-sm font-semibold">Email</label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tumar@email.com"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-semibold">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-          </div>
-          <button disabled={loading} className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 rounded-full disabled:opacity-60">
-            {loading ? "Login hocche..." : "Login"}
-          </button>
+    <div className="min-h- flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-amber-100 dark:border-slate-800 rounded- p-6 sm:p-8 shadow-xl">
+        <h1 className="text-3xl font-black text-center">Welcome Back</h1>
+        <p className="text-center text-slate-500 text-sm mt-1">Login to join and create events.</p>
+        <button onClick={handleGoogle} className="w-full mt-6 bg-white dark:bg-slate-800 border font-bold py-3.5 rounded-full flex items-center justify-center gap-2 text-sm">G Continue with Google</button>
+        <div className="flex items-center gap-3 my-5"><span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" /><span className="text-xs text-slate-400">OR WITH EMAIL</span><span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" /></div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div><label className="text-sm font-bold">Email</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" /></div>
+          <div><label className="text-sm font-bold">Password</label><div className="relative"><input type={showPass ? "text" : "password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Your password" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none pr-14" /><button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-teal-700">{showPass ? "Hide" : "Show"}</button></div></div>
+          <button disabled={loading} className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 rounded-full disabled:opacity-60">{loading ? "Logging in..." : "Login"}</button>
         </form>
-
-        <p className="text-center text-sm mt-5 text-slate-500">
-          Account nai? <Link href="/register" className="text-teal-700 dark:text-teal-400 font-bold">Register koro</Link>
-        </p>
+        <p className="text-center text-sm text-slate-500 mt-5">New to Shohojog? <Link href="/register" className="text-teal-700 font-bold">Create an account</Link></p>
       </div>
     </div>
   );

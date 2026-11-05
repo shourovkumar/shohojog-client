@@ -3,114 +3,59 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signUp, signInWithGoogle } from "@/lib/auth-client";
 import { fetchServerToken } from "@/lib/api";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [photoURL, setPhotoURL] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ name: "", email: "", photoURL: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
-  async function handleRegister(e) {
-    e.preventDefault();
-    if (!name.trim()) return toast.error("Naam dao");
-    if (!email.includes("@")) return toast.error("Thik email dao");
-    if (password.length < 6) return toast.error("Password minimum 6 okkhor hote hobe");
-    if (!/[A-Z]/.test(password)) return toast.error("Password e 1 ta Boro hater okkhor lagbe");
-    if (!/[a-z]/.test(password)) return toast.error("Password e 1 ta Choto hater okkhor lagbe");
-
-    setLoading(true);
-    const { data, error } = await signUp.email({
-      email,
-      password,
-      name,
-      image: photoURL || undefined,
-    });
-    setLoading(false);
-
-    if (error) {
-      toast.error(error.message || "Register hoy nai");
-      return;
-    }
-    if (data?.user) await fetchServerToken(data.user);
-    toast.success("Register hoye gese!");
-    router.push("/");
+  function validate() {
+    if (!form.name.trim()) return "Please enter your name";
+    if (!form.email) return "Please enter your email";
+    if (!form.password) return "Please enter a password";
+    if (form.password.length < 6) return "Password must be at least 6 characters";
+    if (!/[A-Z]/.test(form.password)) return "Password must contain at least one uppercase letter";
+    if (!/[a-z]/.test(form.password)) return "Password must contain at least one lowercase letter";
+    return null;
   }
 
-  async function handleGoogle() {
-    await signIn.social({ provider: "google", callbackURL: "/login" });
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const err = validate();
+    if (err) return toast.error(err);
+    setLoading(true);
+    try {
+      const res = await signUp.email({ email: form.email, password: form.password, name: form.name, image: form.photoURL || "" });
+      if (res.error) throw new Error(res.error.message || "Registration failed");
+      const user = res.data?.user;
+      if (user?.email) await fetchServerToken(user);
+      toast.success("Account created! Welcome to Shohojog");
+      router.push("/upcoming");
+    } catch (err) {
+      toast.error(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-10">
-      <div className="bg-white dark:bg-slate-900 rounded- p-7 md:p-8 border border-amber-100 dark:border-slate-800 shadow-xl">
-        <h1 className="text-3xl font-black text-center">Join Shohojog ✨</h1>
-        <p className="text-center text-slate-500 text-sm mt-2">1 min e account banao</p>
-
-        <button
-          onClick={handleGoogle}
-          className="w-full mt-6 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:shadow"
-        >
-          <span className="w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center font-black">G</span>
-          Google diye Register
-        </button>
-
-        <div className="flex items-center gap-3 my-6">
-          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-          <span className="text-xs text-slate-400">OR</span>
-          <div className="flex-1 h-px bg-slate-200 dark:bg-slate-700" />
-        </div>
-
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div>
-            <label className="text-sm font-semibold">Name</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Tumar naam"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-semibold">Email</label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="tumar@email.com"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-semibold">Photo URL (Optional)</label>
-            <input
-              value={photoURL}
-              onChange={(e) => setPhotoURL(e.target.value)}
-              placeholder="https://... tumar chobir link"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-semibold">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min 6, 1 Boro + 1 Choto hater"
-              className="w-full mt-1 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 outline-none focus:border-teal-600"
-            />
-            <p className="text-xs text-slate-400 mt-1">Password e Boro hater + Choto hater + minimum 6 okkhor lagbe</p>
-          </div>
-          <button disabled={loading} className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-full disabled:opacity-60">
-            {loading ? "Register hocche..." : "Register"}
-          </button>
+    <div className="min-h- flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-amber-100 dark:border-slate-800 rounded- p-6 sm:p-8 shadow-xl">
+        <h1 className="text-3xl font-black text-center">Create Account</h1>
+        <p className="text-center text-slate-500 text-sm mt-1">Join the community and start doing good.</p>
+        <button onClick={async () => { try { await signInWithGoogle(); } catch { toast.error("Google signup failed"); } }} className="w-full mt-6 bg-white dark:bg-slate-800 border font-bold py-3.5 rounded-full text-sm">G Continue with Google</button>
+        <div className="flex items-center gap-3 my-5"><span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" /><span className="text-xs text-slate-400">OR WITH EMAIL</span><span className="flex-1 h-px bg-slate-200 dark:bg-slate-700" /></div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div><label className="text-sm font-bold">Full Name</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" /></div>
+          <div><label className="text-sm font-bold">Email</label><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" /></div>
+          <div><label className="text-sm font-bold">Photo URL <span className="font-normal text-slate-400">(Optional)</span></label><input value={form.photoURL} onChange={(e) => setForm({ ...form, photoURL: e.target.value })} placeholder="https://..." className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none" /></div>
+          <div><label className="text-sm font-bold">Password</label><div className="relative"><input type={showPass ? "text" : "password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Min 6 chars, Upper + Lower" className="w-full mt-1 px-4 py-3.5 rounded-2xl border bg-slate-50 dark:bg-slate-800 outline-none pr-14" /><button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-teal-700">{showPass ? "Hide" : "Show"}</button></div><p className="text-xs text-slate-400 mt-1">Must contain uppercase, lowercase and at least 6 characters.</p></div>
+          <button disabled={loading} className="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 rounded-full disabled:opacity-60">{loading ? "Creating account..." : "Create Account"}</button>
         </form>
-
-        <p className="text-center text-sm mt-5 text-slate-500">
-          Account ache? <Link href="/login" className="text-teal-700 dark:text-teal-400 font-bold">Login koro</Link>
-        </p>
+        <p className="text-center text-sm text-slate-500 mt-5">Already have an account? <Link href="/login" className="text-teal-700 font-bold">Login</Link></p>
       </div>
     </div>
   );
