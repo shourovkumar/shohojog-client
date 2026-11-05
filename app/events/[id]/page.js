@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useSession } from "@/lib/auth-client";
 import { getEventById, getJoinedCount, getJoinedEvents, joinEvent, leaveEvent, fetchServerToken } from "@/lib/api";
 
-export default function EventDetailsPage() {
+function EventDetailsContent() {
   const { id } = useParams();
   const router = useRouter();
   const { data: session } = useSession();
@@ -135,5 +135,13 @@ export default function EventDetailsPage() {
         {!user && <p className="text-center text-sm text-slate-500 mt-2">Please <Link href="/login" className="text-teal-700 font-bold">login</Link> to join this event</p>}
       </div>
     </div>
+  );
+}
+
+export default function EventDetailsPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-16">Loading...</div>}>
+      <EventDetailsContent />
+    </Suspense>
   );
 }
