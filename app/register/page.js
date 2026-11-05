@@ -33,7 +33,7 @@ export default function RegisterPage() {
       const user = res.data?.user;
       if (user?.email) await fetchServerToken(user);
       toast.success("Account created! Welcome to Shohojog");
-      router.push("/upcoming");
+      router.push("/");
     } catch (err) {
       toast.error(err.message || "Registration failed");
     } finally {
